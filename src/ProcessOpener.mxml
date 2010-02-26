@@ -12,7 +12,9 @@
 			import flash.events.ProgressEvent;
 			
 			import mx.events.FlexEvent;
-
+			
+			private var nativeProcess : NativeProcess;
+			
 			protected function windowedapplication1_applicationCompleteHandler(event:FlexEvent):void
 			{
 				trace(NativeProcess.isSupported);
@@ -20,13 +22,16 @@
 
 			protected function openFile_clickHandler(event:MouseEvent):void
 			{
+				
 				var exeFile : File = new File(executableFile.text);
 				var startInfo : NativeProcessStartupInfo = new NativeProcessStartupInfo();
 				startInfo.executable = exeFile;
-				var nativeProcess : NativeProcess = new NativeProcess();
+				nativeProcess = new NativeProcess();
 				nativeProcess.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, standardErrorData);
 				nativeProcess.addEventListener(ProgressEvent.STANDARD_INPUT_PROGRESS, standardInput);
+				nativeProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, standardOutputData);
 				nativeProcess.start(startInfo);
+				
 			}
 			
 			private function standardErrorData(event : ProgressEvent):void{
@@ -35,6 +40,23 @@
 			
 			private function standardInput(event : ProgressEvent) : void{
 				
+				
+				
+			}
+			
+			private function standardOutputData(event : ProgressEvent):void{
+				
+				var np : NativeProcess = event.currentTarget as NativeProcess;
+				var outputText : String = np.standardOutput.readUTFBytes( np.standardOutput.bytesAvailable );
+				output.text += outputText;
+				
+			}
+
+
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				//nativeProcess.standardInput.writeUTFBytes(command.text);
+				nativeProcess.standardInput.writeUTF(command.text);
 			}
 
 		]]>
@@ -48,10 +70,16 @@
 	
 	<s:BorderContainer width="100%" height="50">
 		<s:layout><s:HorizontalLayout/></s:layout>
-		<s:TextInput id="executableFile" width="100%" height="100%"/>
+		<s:TextInput id="executableFile" width="100%" height="100%" text="C:\Windows\System32\cmd.exe"/>
 		<s:Button id="openFile" height="100%" label="Start" click="openFile_clickHandler(event)" />
 	</s:BorderContainer>
 	
 	<s:RichEditableText id="output" height="100%" width="100%" editable="false"/>
+	
+	<s:Group width="100%">
+		<s:layout><s:HorizontalLayout/></s:layout>
+		<s:TextInput id="command" width="100%" height="50" />
+		<s:Button height="100%" label="Send" click="button1_clickHandler(event)" />
+	</s:Group>
 	
 </s:WindowedApplication>
