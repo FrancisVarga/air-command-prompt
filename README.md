@@ -41,6 +41,3 @@ I hate the command prompt from windows! So i write a wrapper :D...
   - support of templates
   - support of coloring
 - code highlighting
-
-best regards
-Francis
