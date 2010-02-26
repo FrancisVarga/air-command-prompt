@@ -13,6 +13,8 @@ package cc.varga.mvcs
 		
 		override public function startup() : void{
 			
+			
+			
 		}
 		
 	}

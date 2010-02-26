@@ -2,8 +2,8 @@
 <actionScriptProperties mainApplicationPath="ProcessOpener.mxml" projectUUID="ab42ae07-57ac-4831-8ad0-9c6820d2dd35" version="6">
   <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="true" copyDependentFiles="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="true" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath>
-      <compilerSourcePathEntry kind="1" linkType="1" path="libs/robo/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="libs/swift/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="libs/robo/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="libs/as3Core/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="0">

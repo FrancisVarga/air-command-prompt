@@ -8,6 +8,8 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import cc.varga.mvcs.views.commandView.CommandContentView;
+			
 			import com.adobe.serialization.json.JSON;
 			
 			import flash.events.Event;
@@ -55,7 +57,7 @@
 			}
 			
 			private function createCommandShell():void{
-				var newCommandShell : CommandContent = new CommandContent();
+				var newCommandShell : CommandContentView = new CommandContentView();
 				tabContainer.addElement(newCommandShell);
 				newCommandShell.label = "CommandShell " + tabContainer.length;
 				tabContainer.selectedIndex = tabContainer.length-1;
@@ -77,7 +79,7 @@
 				tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, 
 					function(event:*):void{
 						trace("Added to Stage"); 
-						(event.relatedObject as CommandContent).startCommandShell();
+						(event.relatedObject as CommandContentView).startCommandShell();
 					} 
 				);
 				
