@@ -1,0 +1,5 @@
+{"alias" : {
+        "ls" : "ls -la",
+		"gom" : "git pom"
+    }
+}

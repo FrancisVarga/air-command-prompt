@@ -8,17 +8,32 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			
+			import flash.events.Event;
 			import flash.events.KeyboardEvent;
 			
 			import mx.events.FlexEvent;
 			
 			private var nativeProcess : NativeProcess;
+			private var config : Object;
+			
 			private static var _INSTANCE : ProcessOpener;
 			
 			private function onAppKeyDown(event : KeyboardEvent):void{
 				
+				trace(event.ctrlKey + " || " + event.keyCode);
+				
 				if(event.ctrlKey == true && event.keyCode == 84 || event == null){
+				
 					createCommandShell();
+				
+				} else if(event.ctrlKey == true && event.keyCode == 87){
+					
+					if(tabContainer.selectedIndex > 0){
+						tabContainer.removeChildAt(tabContainer.selectedIndex);	
+					}
+					
 				} else if( event.altKey == true && event.keyCode == 37){
 					
 					if(tabContainer.length > 0){
@@ -30,6 +45,10 @@
 					if(tabContainer.selectedIndex < tabContainer.length-1){
 						tabContainer.selectedIndex++;
 					} 
+					
+				} else if( event.ctrlKey == true && event.keyCode == 81){
+					
+					NativeApplication.nativeApplication.exit();
 					
 				}
 				
@@ -63,7 +82,22 @@
 				);
 				
 				createCommandShell();
+				
+				openConfigFile();
+				
+			}
 			
+			private function openConfigFile():void{
+				var cnf : File = File.applicationDirectory.resolvePath("lib/config/config.json");
+				var fStream : FileStream = new FileStream();
+				fStream.addEventListener(Event.COMPLETE, onConfigFileComplete);
+				fStream.openAsync(cnf, FileMode.READ);
+			}
+			
+			private function onConfigFileComplete(event : Event):void{
+				trace("Configfile Complete");	
+				var stream : FileStream = event.currentTarget as FileStream;
+				config = JSON.decode(stream.readUTFBytes( stream.bytesAvailable ));
 			}
 			
 			private static function get Instance():ProcessOpener{

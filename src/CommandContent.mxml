@@ -6,6 +6,7 @@
 					creationComplete="navigatorcontent1_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import spark.events.TextOperationEvent;
 			import flash.events.ProgressEvent;
 			
 			import mx.events.FlexEvent;
@@ -56,13 +57,30 @@
 				}
 			}
 
+
+			protected function output_changeHandler(event:TextOperationEvent):void
+			{
+				
+				trace("Change Output text");
+				
+			}
+
+
+			protected function output_changingHandler(event:TextOperationEvent):void
+			{
+				trace("Change Output text");
+			}
+
 		]]>
 	</fx:Script>
 	
 	<s:layout><s:VerticalLayout/></s:layout>
 	
 	<s:Scroller height="100%" width="100%">
-		<s:RichEditableText id="output" height="100%" width="100%" editable="false" fontFamily="Courier New" fontSize="12" color="#FFFFFF" backgroundColor="#000000" />
+		<s:RichEditableText id="output" height="100%" width="100%" editable="false" fontFamily="Courier New" fontSize="12" color="#FFFFFF" backgroundColor="#000000"
+							change="output_changeHandler(event)"
+							changing="output_changingHandler(event)"
+							/>
 	</s:Scroller>
 	
 	<s:Group width="100%">

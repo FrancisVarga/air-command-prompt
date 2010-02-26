@@ -1,0 +1,9 @@
+[submodule "libs\\swift"]
+	path = libs\\swift
+	url = git://github.com/darscan/SwiftSuspenders.git
+[submodule "libs\\robo"]
+	path = libs\\robo
+	url = git://github.com/robotlegs/robotlegs-framework.git
+[submodule "libs\\as3Core"]
+	path = libs\\as3Core
+	url = git://github.com/sixones/as3corelib.git
