@@ -14,6 +14,14 @@
 
 			protected function navigatorcontent1_creationCompleteHandler(event:*):void
 			{
+				
+				trace("Creation Complete");
+				startCommandShell();
+				
+			}
+			
+			public function startCommandShell():void{
+				
 				var exeFile : File = new File("C:/Windows/System32/cmd.exe");
 				var startInfo : NativeProcessStartupInfo = new NativeProcessStartupInfo();
 				startInfo.executable = exeFile;
@@ -22,6 +30,7 @@
 				nativeProcess.addEventListener(ProgressEvent.STANDARD_INPUT_PROGRESS, standardInput);
 				nativeProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, standardOutputData);
 				nativeProcess.start(startInfo);
+				
 			}
 			
 			private function standardErrorData(event : ProgressEvent):void{

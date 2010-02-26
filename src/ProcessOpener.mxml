@@ -3,7 +3,7 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/halo"
 					   minWidth="1024" minHeight="768" 
-					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
+					   applicationComplete="windowedapplication1_creationCompleteHandler(event)"
 					   xmlns:ns="library://ns.adobe.com/flex/mx" xmlns:local="*">
 	
 	<fx:Script>
@@ -13,21 +13,61 @@
 			import mx.events.FlexEvent;
 			
 			private var nativeProcess : NativeProcess;
+			private static var _INSTANCE : ProcessOpener;
 			
 			private function onAppKeyDown(event : KeyboardEvent):void{
 				
-				if(event.ctrlKey == true && event.keyCode == 84){
+				if(event.ctrlKey == true && event.keyCode == 84 || event == null){
+					createCommandShell();
+				} else if( event.altKey == true && event.keyCode == 37){
 					
-					tabContainer.addElement(new CommandContent());
+					if(tabContainer.length > 0){
+						tabContainer.selectedIndex--;
+					}
 					
-				} 
+				} else if( event.altKey == true && event.keyCode == 39){
+					
+					if(tabContainer.selectedIndex < tabContainer.length-1){
+						tabContainer.selectedIndex++;
+					} 
+					
+				}
+				
+			}
+			
+			private function createCommandShell():void{
+				var newCommandShell : CommandContent = new CommandContent();
+				tabContainer.addElement(newCommandShell);
+				newCommandShell.label = "CommandShell " + tabContainer.length;
+				tabContainer.selectedIndex = tabContainer.length-1;
+			}
+			
+			private static function registryApplcationEvents():void{
+				
+				NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, ProcessOpener.Instance.onAppKeyDown);
 				
 			}
 
 
 			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
-				this.addEventListener(KeyboardEvent.KEY_DOWN, onAppKeyDown);
+				
+				ProcessOpener._INSTANCE = this;
+				ProcessOpener.registryApplcationEvents();
+				
+				tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, 
+					function(event:*):void{
+						trace("Added to Stage"); 
+						(event.relatedObject as CommandContent).startCommandShell();
+					} 
+				);
+				
+				createCommandShell();
+			
+			}
+			
+			private static function get Instance():ProcessOpener{
+				return _INSTANCE;
 			}
 
 		]]>
@@ -40,7 +80,7 @@
 	<s:layout><s:VerticalLayout/></s:layout>
 	
 	<ns:TabNavigator id="tabContainer" width="100%" height="100%">
-		<local:CommandContent label="Command 1" width="100%" height="100%"/>
+		
 	</ns:TabNavigator>
 	
 </s:WindowedApplication>
