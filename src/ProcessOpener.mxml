@@ -8,9 +8,11 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import flash.events.KeyboardEvent;
 			import flash.events.MouseEvent;
 			import flash.events.ProgressEvent;
 			
+			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			
 			private var nativeProcess : NativeProcess;
@@ -23,7 +25,7 @@
 			protected function openFile_clickHandler(event:MouseEvent):void
 			{
 				
-				var exeFile : File = new File(executableFile.text);
+				var exeFile : File = new File("C:\Windows\System32\cmd.exe");
 				var startInfo : NativeProcessStartupInfo = new NativeProcessStartupInfo();
 				startInfo.executable = exeFile;
 				nativeProcess = new NativeProcess();
@@ -35,13 +37,10 @@
 			}
 			
 			private function standardErrorData(event : ProgressEvent):void{
-				
+				Alert.show("Something is wrong!", "Error");
 			}
 			
-			private function standardInput(event : ProgressEvent) : void{
-				
-				
-				
+			private function standardInput(event : ProgressEvent) : void{				
 			}
 			
 			private function standardOutputData(event : ProgressEvent):void{
@@ -51,12 +50,13 @@
 				output.text += outputText;
 				
 			}
-
-
-			protected function button1_clickHandler(event:MouseEvent):void
+			
+			protected function command_keyDownHandler(event:KeyboardEvent):void
 			{
-				//nativeProcess.standardInput.writeUTFBytes(command.text);
-				nativeProcess.standardInput.writeUTF(command.text);
+				if(event.charCode == 13){	
+					nativeProcess.standardInput.writeUTFBytes(command.text + "\n");
+					command.text = "";
+				}
 			}
 
 		]]>
@@ -68,18 +68,13 @@
 	
 	<s:layout><s:VerticalLayout/></s:layout>
 	
-	<s:BorderContainer width="100%" height="50">
-		<s:layout><s:HorizontalLayout/></s:layout>
-		<s:TextInput id="executableFile" width="100%" height="100%" text="C:\Windows\System32\cmd.exe"/>
-		<s:Button id="openFile" height="100%" label="Start" click="openFile_clickHandler(event)" />
-	</s:BorderContainer>
-	
-	<s:RichEditableText id="output" height="100%" width="100%" editable="false"/>
+	<s:Scroller height="100%" width="100%">
+		<s:RichEditableText id="output" height="100%" width="100%" editable="false" fontFamily="Courier New" fontSize="12" color="#FFFFFF" backgroundColor="#000000" />
+	</s:Scroller>
 	
 	<s:Group width="100%">
 		<s:layout><s:HorizontalLayout/></s:layout>
-		<s:TextInput id="command" width="100%" height="50" />
-		<s:Button height="100%" label="Send" click="button1_clickHandler(event)" />
+		<s:TextInput id="command" width="100%" height="50" keyDown="command_keyDownHandler(event)" />
 	</s:Group>
 	
 </s:WindowedApplication>
