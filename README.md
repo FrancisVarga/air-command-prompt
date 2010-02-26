@@ -26,7 +26,21 @@ Copyright (c) 2010 Francis Varga
 
 ## Instructions
 
-This is a very small AIR File that's to show how to open a executable file and control it...
+I hate the command prompt from windows! So i write a wrapper :D...
+
+##Features
+
+1. Tabbing of consoles
+2. navigate betweent consoles via (ALT + Left) && (ALT + Right)
+3. open a new console via (CTRL + T)
+
+##Roadmap
+
+- code completion
+- config via json file
+  - support of templates
+  - support of coloring
+- code highlighting
 
 best regards
 Francis
