@@ -2,61 +2,32 @@
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/halo"
-					   applicationComplete="windowedapplication1_applicationCompleteHandler(event)"
-					   
-					   minWidth="1024" minHeight="768">
+					   minWidth="1024" minHeight="768" 
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
+					   xmlns:ns="library://ns.adobe.com/flex/mx" xmlns:local="*">
 	
 	<fx:Script>
 		<![CDATA[
 			import flash.events.KeyboardEvent;
-			import flash.events.MouseEvent;
-			import flash.events.ProgressEvent;
 			
-			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			
 			private var nativeProcess : NativeProcess;
 			
-			protected function windowedapplication1_applicationCompleteHandler(event:FlexEvent):void
-			{
-				trace(NativeProcess.isSupported);
+			private function onAppKeyDown(event : KeyboardEvent):void{
+				
+				if(event.ctrlKey == true && event.keyCode == 84){
+					
+					tabContainer.addElement(new CommandContent());
+					
+				} 
+				
 			}
 
-			protected function openFile_clickHandler(event:MouseEvent):void
+
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
-				
-				var exeFile : File = new File("C:\Windows\System32\cmd.exe");
-				var startInfo : NativeProcessStartupInfo = new NativeProcessStartupInfo();
-				startInfo.executable = exeFile;
-				nativeProcess = new NativeProcess();
-				nativeProcess.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, standardErrorData);
-				nativeProcess.addEventListener(ProgressEvent.STANDARD_INPUT_PROGRESS, standardInput);
-				nativeProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, standardOutputData);
-				nativeProcess.start(startInfo);
-				
-			}
-			
-			private function standardErrorData(event : ProgressEvent):void{
-				Alert.show("Something is wrong!", "Error");
-			}
-			
-			private function standardInput(event : ProgressEvent) : void{				
-			}
-			
-			private function standardOutputData(event : ProgressEvent):void{
-				
-				var np : NativeProcess = event.currentTarget as NativeProcess;
-				var outputText : String = np.standardOutput.readUTFBytes( np.standardOutput.bytesAvailable );
-				output.text += outputText;
-				
-			}
-			
-			protected function command_keyDownHandler(event:KeyboardEvent):void
-			{
-				if(event.charCode == 13){	
-					nativeProcess.standardInput.writeUTFBytes(command.text + "\n");
-					command.text = "";
-				}
+				this.addEventListener(KeyboardEvent.KEY_DOWN, onAppKeyDown);
 			}
 
 		]]>
@@ -68,13 +39,8 @@
 	
 	<s:layout><s:VerticalLayout/></s:layout>
 	
-	<s:Scroller height="100%" width="100%">
-		<s:RichEditableText id="output" height="100%" width="100%" editable="false" fontFamily="Courier New" fontSize="12" color="#FFFFFF" backgroundColor="#000000" />
-	</s:Scroller>
-	
-	<s:Group width="100%">
-		<s:layout><s:HorizontalLayout/></s:layout>
-		<s:TextInput id="command" width="100%" height="50" keyDown="command_keyDownHandler(event)" />
-	</s:Group>
+	<ns:TabNavigator id="tabContainer" width="100%" height="100%">
+		<local:CommandContent label="Command 1" width="100%" height="100%"/>
+	</ns:TabNavigator>
 	
 </s:WindowedApplication>

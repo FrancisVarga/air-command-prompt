@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/halo" 
+					width="100%" height="100%"
+					creationComplete="navigatorcontent1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import flash.events.ProgressEvent;
+			
+			import mx.events.FlexEvent;
+			
+			private var nativeProcess : NativeProcess;
+
+			protected function navigatorcontent1_creationCompleteHandler(event:*):void
+			{
+				var exeFile : File = new File("C:/Windows/System32/cmd.exe");
+				var startInfo : NativeProcessStartupInfo = new NativeProcessStartupInfo();
+				startInfo.executable = exeFile;
+				nativeProcess = new NativeProcess();
+				nativeProcess.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, standardErrorData);
+				nativeProcess.addEventListener(ProgressEvent.STANDARD_INPUT_PROGRESS, standardInput);
+				nativeProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, standardOutputData);
+				nativeProcess.start(startInfo);
+			}
+			
+			private function standardErrorData(event : ProgressEvent):void{
+				
+			}
+			
+			private function standardInput(event : ProgressEvent):void{
+				
+			}
+			
+			private function standardOutputData(event : ProgressEvent):void{
+				
+				var np : NativeProcess = event.currentTarget as NativeProcess;
+				output.text += np.standardOutput.readUTFBytes( np.standardOutput.bytesAvailable );
+				
+			}
+			
+			protected function command_keyDownHandler(event:KeyboardEvent):void
+			{
+				if(event.charCode == 13){	
+					nativeProcess.standardInput.writeUTFBytes(command.text + "\n");
+					command.text = "";
+				}
+			}
+
+		]]>
+	</fx:Script>
+	
+	<s:layout><s:VerticalLayout/></s:layout>
+	
+	<s:Scroller height="100%" width="100%">
+		<s:RichEditableText id="output" height="100%" width="100%" editable="false" fontFamily="Courier New" fontSize="12" color="#FFFFFF" backgroundColor="#000000" />
+	</s:Scroller>
+	
+	<s:Group width="100%">
+		<s:layout><s:HorizontalLayout/></s:layout>
+		<s:TextInput id="command" width="100%" height="50" keyDown="command_keyDownHandler(event)" />
+	</s:Group>
+</s:NavigatorContent>
